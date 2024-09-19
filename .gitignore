@@ -1,0 +1,9 @@
+#ignore dll and pdb
+*.dll
+*.pdb
+*.bin
+
+#ignore bin and obj
+bin/
+obj/
+.vs/
