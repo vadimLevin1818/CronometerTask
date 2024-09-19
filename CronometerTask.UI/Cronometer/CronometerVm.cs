@@ -19,7 +19,7 @@ namespace CronometerTask.UI.Cronometer
         private string? _seconds;
         private string? _minutes;
         private string? _hours;
-        private CronometerService _cronometerService;
+        private readonly CronometerService _cronometerService;
         private readonly ICommand? _startCommand;
         private readonly ICommand? _pauseCommand;
         private readonly ICommand? _stopCommand;
@@ -35,10 +35,7 @@ namespace CronometerTask.UI.Cronometer
             var cronometer = Domain.Cronometers.Cronometer.CreateCronometer(timer);
             _cronometerService = new CronometerService(cronometer);
 
-            _startCommand = new RelayCommand((param) => {
-                _cronometerService.Start();
-                NotifyAvailabilityPropertiesChanged();
-            }, param => CanStart);
+            _startCommand = new RelayCommand(Start, param => CanStart);
 
             _pauseCommand = new RelayCommand((param) => 
             {
@@ -58,6 +55,21 @@ namespace CronometerTask.UI.Cronometer
         #endregion
 
         #region Private Routines
+
+        private void Start(object? param)
+        {
+            try
+            {
+                _cronometerService.Start();
+                NotifyAvailabilityPropertiesChanged();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
 
         private void CronometerUnitOfTimeElapsed(object? sender, UnitOfTimeElapsedEventArgs args)
         {
@@ -121,31 +133,19 @@ namespace CronometerTask.UI.Cronometer
         public string? Seconds
         {
             get => _seconds;
-            private set
-            {
-                _seconds = value;
-                OnPropertyChanged();
-            }
+            private set => SetProperty(ref _seconds, value);
         }
 
         public string? Minutes
         {
             get => _minutes;
-            private set
-            {
-                _minutes = value;
-                OnPropertyChanged();
-            }
+            private set => SetProperty(ref _minutes, value);
         }
 
         public string? Hours
         {
             get => _hours;
-            private set
-            {
-                _hours = value;
-                OnPropertyChanged();
-            }
+            private set => SetProperty(ref _hours, value);
         }
 
         public bool CanStart => !_cronometerService.IsRunning;
