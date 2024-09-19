@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace CronometerTask.Domain.Cronometer
+namespace CronometerTask.Domain.Cronometers
 {
     public class SecondsTimeMeasure : ICronometerTimeMeasure
     {

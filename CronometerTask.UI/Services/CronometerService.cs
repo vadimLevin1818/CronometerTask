@@ -1,4 +1,4 @@
-﻿using CronometerTask.Domain.Cronometer;
+﻿using CronometerTask.Domain.Cronometers;
 
 namespace CronometerTask.UI.Services
 {

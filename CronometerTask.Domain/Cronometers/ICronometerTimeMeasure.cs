@@ -1,4 +1,4 @@
-﻿namespace CronometerTask.Domain.Cronometer
+﻿namespace CronometerTask.Domain.Cronometers
 {
     public interface ICronometerTimeMeasure
     {

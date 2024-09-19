@@ -1,6 +1,6 @@
 ﻿using CronometerTask.Domain.Common;
 
-namespace CronometerTask.Domain.Cronometer
+namespace CronometerTask.Domain.Cronometers
 {
     public interface ICronometer
     {
