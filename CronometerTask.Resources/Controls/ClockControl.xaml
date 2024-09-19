@@ -12,7 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/Labels.xaml"/>
                 <ResourceDictionary Source="../Styles/Borders.xaml"/>
-                <ResourceDictionary Source="../Styles/CustomControls.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>

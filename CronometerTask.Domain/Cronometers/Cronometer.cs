@@ -5,21 +5,34 @@ namespace CronometerTask.Domain.Cronometers
     public class Cronometer : AggregateRoot, ICronometer
     {
         private readonly System.Timers.Timer _timer;
-        private readonly ICronometerTimeMeasure? _cronometerTime;
+        private readonly ICronometerTimeMeasure _cronometerTimeMeasure;
+        private EventHandler<UnitOfTimeElapsedEventArgs>? UnitOfTimeElapsedInternal;
 
         private Cronometer(ICronometerTimeMeasure cronometerTime):base(Guid.NewGuid())
         {
-            _cronometerTime = cronometerTime;
+            _cronometerTimeMeasure = cronometerTime;
             _timer = new System.Timers.Timer();
-            _timer.Interval = _cronometerTime.Interval;
+            _timer.Interval = _cronometerTimeMeasure.Interval;
             _timer.Elapsed += _timer_Elapsed;
+        }
+
+        public event EventHandler<UnitOfTimeElapsedEventArgs>? UnitOfTimeElapsed
+        {
+            add
+            {
+                UnitOfTimeElapsedInternal += value;
+            }
+            remove
+            {
+                UnitOfTimeElapsedInternal -= value;
+            }
         }
 
         private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _cronometerTime?.AdvanceTime();
-            var args = new TimerElapsedEventArgs() { CronometerTime = _cronometerTime };
-            UnitOfTimeElapsed?.Invoke(this, args);
+            _cronometerTimeMeasure.AdvanceTime();
+            var args = new UnitOfTimeElapsedEventArgs() { CronometerTimeMeasure = _cronometerTimeMeasure };
+            UnitOfTimeElapsedInternal?.Invoke(this, args);
         }
 
         public void Start()
@@ -38,29 +51,14 @@ namespace CronometerTask.Domain.Cronometers
 
         public void Stop()
         {
-            _cronometerTime?.Reset();
+            _cronometerTimeMeasure?.Reset();
             IsRunning = false;
             IsPaused = false;
 
-            var args = new TimerElapsedEventArgs() { CronometerTime = _cronometerTime };
-            UnitOfTimeElapsed?.Invoke(this, args);
+            var args = new UnitOfTimeElapsedEventArgs() { CronometerTimeMeasure = _cronometerTimeMeasure };
+            UnitOfTimeElapsedInternal?.Invoke(this, args);
         }
 
-        private void TimerCallback(Object state)
-        {
-
-        }
-
-        private void RaiseSecondElapsed()
-        {
-
-        }
-
-        public event EventHandler<TimerElapsedEventArgs>? UnitOfTimeElapsed;
-        public int Seconds { get; private set; }
-        public int Minutes { get; private set; }
-        public int Hours { get; private set; }
-        public ICronometerTimeMeasure CronometerTime { get; private set; }
         public bool IsRunning { get; private set; }
         public bool IsPaused { get; private set; }
         

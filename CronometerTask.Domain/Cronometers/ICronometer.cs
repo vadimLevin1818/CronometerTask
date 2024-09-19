@@ -9,6 +9,6 @@ namespace CronometerTask.Domain.Cronometers
         void Stop();
         bool IsRunning {  get; }
         bool IsPaused { get; }
-        event EventHandler<TimerElapsedEventArgs> UnitOfTimeElapsed;
+        event EventHandler<UnitOfTimeElapsedEventArgs> UnitOfTimeElapsed;
     }
 }

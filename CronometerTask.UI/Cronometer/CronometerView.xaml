@@ -26,7 +26,9 @@
             Minutes="{Binding DataContext.Minutes, ElementName=CronometerViewControl, Mode=OneWay}"
             Hours="{Binding DataContext.Hours, ElementName=CronometerViewControl, Mode=OneWay}"/>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-            <Button Style="{StaticResource CronometerButton}" Command="{Binding StartCommand}">Start</Button>
+            <Button Style="{StaticResource CronometerButton}" Command="{Binding StartCommand}">
+                <TextBlock Text="{Binding StartButtonHeader}"/>
+            </Button>
             <Button Style="{StaticResource CronometerButton}" Command="{Binding PauseCommand}">Pause</Button>
             <Button Style="{StaticResource CronometerButton}" Command="{Binding StopCommand}">Stop</Button>
         </StackPanel>

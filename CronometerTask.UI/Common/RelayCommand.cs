@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace CronoTask.UI.Common
 {
@@ -11,7 +6,7 @@ namespace CronoTask.UI.Common
     {
         private readonly Action<object?>? _execute;
         private readonly Predicate<object?> _canExecute;
-        private event EventHandler CanExecuteChangedInternal;
+        private event EventHandler? CanExecuteChangedInternal;
 
         public RelayCommand(Action<object?>? execute):this(execute, DefaultCanExecute)
         {
@@ -53,13 +48,9 @@ namespace CronoTask.UI.Common
         public void OnCanExecuteChanged()
         {
             var handler = CanExecuteChangedInternal;
-            if (handler != null)
-            {
-                //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
-                handler.Invoke(this, EventArgs.Empty);
-            }
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
-        public static bool DefaultCanExecute(object parameter) => true;
+        public static bool DefaultCanExecute(object? parameter) => true;
     }
 }

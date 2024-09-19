@@ -1,4 +1,5 @@
-﻿using CronometerTask.Domain.Cronometers;
+﻿using CronometerTask.Domain.Common;
+using CronometerTask.Domain.Cronometers;
 using CronometerTask.UI.Services;
 using CronoTask.UI.Common;
 using CronoTask.UI.ViewModel;
@@ -8,16 +9,24 @@ namespace CronometerTask.UI.Cronometer
 {
     public class CronometerVm : ViewModelBase
     {
+        #region Private Members
+
         private const string InitialTimeValue = "00";
+        private const string InitialStartButtonHeader = "Start";
+        private const string PauseStartButtonHeader = "Restart";
+        private const int NumericRepresentationThreashold = 10;
 
         private string? _seconds;
         private string? _minutes;
         private string? _hours;
-        //private Domain.Cronometer.ICronometer _cronometer;
         private CronometerService _cronometerService;
         private readonly ICommand? _startCommand;
         private readonly ICommand? _pauseCommand;
         private readonly ICommand? _stopCommand;
+
+        #endregion
+
+        #region Ctor
 
         public CronometerVm()
         {
@@ -43,13 +52,28 @@ namespace CronometerTask.UI.Cronometer
                 NotifyAvailabilityPropertiesChanged();
             }, param => CanReset);
 
-            cronometer.UnitOfTimeElapsed += (sender, args) => {
-                if (args.CronometerTime == null) return;
+            cronometer.UnitOfTimeElapsed += CronometerUnitOfTimeElapsed;
+        }
 
-                Seconds = args.CronometerTime.Time.Second < 10 ? $"0{args.CronometerTime.Time.Second}" : args.CronometerTime.Time.Second.ToString();
-                Minutes = args.CronometerTime.Time.Minute < 10 ? $"0{args.CronometerTime.Time.Minute}" : args.CronometerTime.Time.Minute.ToString();
-                Hours = args.CronometerTime.Time.Hour < 10 ? $"0{args.CronometerTime.Time.Hour}" : args.CronometerTime.Time.Hour.ToString();
-            };
+        #endregion
+
+        #region Private Routines
+
+        private void CronometerUnitOfTimeElapsed(object? sender, UnitOfTimeElapsedEventArgs args)
+        {
+            if (args?.CronometerTimeMeasure == null) return;
+
+            Seconds = args.CronometerTimeMeasure.Time.Second < NumericRepresentationThreashold 
+                ? $"0{args.CronometerTimeMeasure.Time.Second}" 
+                : args.CronometerTimeMeasure.Time.Second.ToString();
+
+            Minutes = args.CronometerTimeMeasure.Time.Minute < NumericRepresentationThreashold 
+                ? $"0{args.CronometerTimeMeasure.Time.Minute}" 
+                : args.CronometerTimeMeasure.Time.Minute.ToString();
+
+            Hours = args.CronometerTimeMeasure.Time.Hour < NumericRepresentationThreashold 
+                ? $"0{args.CronometerTimeMeasure.Time.Hour}" 
+                : args.CronometerTimeMeasure.Time.Hour.ToString();
         }
 
         private void SetInitialClockParameters()
@@ -64,7 +88,10 @@ namespace CronometerTask.UI.Cronometer
             OnPropertyChanged(nameof(CanStart));
             OnPropertyChanged(nameof(CanStop));
             OnPropertyChanged(nameof(CanReset));
+            OnPropertyChanged(nameof(StartButtonHeader));
         }
+
+        #endregion
 
         #region Commands
 
@@ -86,6 +113,10 @@ namespace CronometerTask.UI.Cronometer
         #endregion
 
         #region Properties
+
+        public string StartButtonHeader => _cronometerService.IsPaused || _cronometerService.IsRunning
+            ? PauseStartButtonHeader 
+            : InitialStartButtonHeader;
 
         public string? Seconds
         {
