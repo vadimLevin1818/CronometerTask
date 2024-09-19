@@ -27,10 +27,29 @@
             Hours="{Binding DataContext.Hours, ElementName=CronometerViewControl, Mode=OneWay}"/>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
             <Button Style="{StaticResource CronometerButton}" Command="{Binding StartCommand}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
                 <TextBlock Text="{Binding StartButtonHeader}"/>
             </Button>
-            <Button Style="{StaticResource CronometerButton}" Command="{Binding PauseCommand}">Pause</Button>
-            <Button Style="{StaticResource CronometerButton}" Command="{Binding StopCommand}">Stop</Button>
+            <Button Style="{StaticResource CronometerButton}" Command="{Binding PauseCommand}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+                Pause
+            </Button>
+            <Button Style="{StaticResource CronometerButton}" Command="{Binding StopCommand}">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources> 
+                Stop
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

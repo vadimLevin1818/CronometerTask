@@ -8,9 +8,9 @@ namespace CronometerTask.Domain.Cronometers
         private readonly ICronometerTimeMeasure _cronometerTimeMeasure;
         private EventHandler<UnitOfTimeElapsedEventArgs>? UnitOfTimeElapsedInternal;
 
-        private Cronometer(ICronometerTimeMeasure cronometerTime):base(Guid.NewGuid())
+        private Cronometer(ICronometerTimeMeasure cronometerTimeMeasure):base(Guid.NewGuid())
         {
-            _cronometerTimeMeasure = cronometerTime;
+            _cronometerTimeMeasure = cronometerTimeMeasure;
             _timer = new System.Timers.Timer();
             _timer.Interval = _cronometerTimeMeasure.Interval;
             _timer.Elapsed += _timer_Elapsed;

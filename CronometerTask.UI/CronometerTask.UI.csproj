@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CronometerTask.Domain\CronometerTask.Domain.csproj" />
+    <ProjectReference Include="..\CronometerTask.Infrastructure\CronometerTask.Infrastructure.csproj" />
     <ProjectReference Include="..\CronometerTask.Resources\CronometerTask.Resources.csproj" />
   </ItemGroup>
 

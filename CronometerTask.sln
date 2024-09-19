@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CronometerTask.UI", "Cronom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CronometerTask.Domain", "CronometerTask.Domain\CronometerTask.Domain.csproj", "{91D26153-0B71-4EEC-962C-93F6961B0651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronometerTask.Tests", "CronometerTask.Tests\CronometerTask.Tests.csproj", "{DE6EA391-612B-4164-B48F-CEF5EDF48171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CronometerTask.Tests", "CronometerTask.Tests\CronometerTask.Tests.csproj", "{DE6EA391-612B-4164-B48F-CEF5EDF48171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronometerTask.Infrastructure", "CronometerTask.Infrastructure\CronometerTask.Infrastructure.csproj", "{52236216-20C5-4477-B6A2-DFC25CF81D1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DE6EA391-612B-4164-B48F-CEF5EDF48171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE6EA391-612B-4164-B48F-CEF5EDF48171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE6EA391-612B-4164-B48F-CEF5EDF48171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52236216-20C5-4477-B6A2-DFC25CF81D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52236216-20C5-4477-B6A2-DFC25CF81D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52236216-20C5-4477-B6A2-DFC25CF81D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52236216-20C5-4477-B6A2-DFC25CF81D1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

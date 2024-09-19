@@ -36,18 +36,8 @@ namespace CronometerTask.UI.Cronometer
             _cronometerService = new CronometerService(cronometer);
 
             _startCommand = new RelayCommand(Start, param => CanStart);
-
-            _pauseCommand = new RelayCommand((param) => 
-            {
-                _cronometerService.Pause();
-                NotifyAvailabilityPropertiesChanged();
-            }, param => CanStop);
-
-            _stopCommand = new RelayCommand((param) =>
-            {
-                _cronometerService.Stop();
-                NotifyAvailabilityPropertiesChanged();
-            }, param => CanReset);
+            _pauseCommand = new RelayCommand(Pause, param => CanStop);
+            _stopCommand = new RelayCommand(Stop, param => CanReset);
 
             cronometer.UnitOfTimeElapsed += CronometerUnitOfTimeElapsed;
         }
@@ -63,7 +53,37 @@ namespace CronometerTask.UI.Cronometer
                 _cronometerService.Start();
                 NotifyAvailabilityPropertiesChanged();
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        private void Pause(object? param)
+        {
+            try
+            {
+                _cronometerService.Pause();
+                NotifyAvailabilityPropertiesChanged();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        private void Stop(object? param)
+        {
+            try
+            {
+                _cronometerService.Stop();
+                NotifyAvailabilityPropertiesChanged();
+            }
+            catch (Exception ex)
             {
 
                 throw;
