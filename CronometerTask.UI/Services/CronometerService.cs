@@ -25,5 +25,8 @@ namespace CronometerTask.UI.Services
         {
             _cronometer.Stop();
         }
+
+        public bool IsRunning => _cronometer.IsRunning;
+        public bool IsPaused => _cronometer.IsPaused;
     }
 }

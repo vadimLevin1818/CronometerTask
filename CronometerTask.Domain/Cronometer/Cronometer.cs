@@ -1,24 +1,23 @@
-﻿
-using CronometerTask.Domain.Common;
+﻿using CronometerTask.Domain.Common;
 
 namespace CronometerTask.Domain.Cronometer
 {
-    public class Cronometer : ICronometer
+    public class Cronometer : AggregateRoot, ICronometer
     {
         private readonly System.Timers.Timer _timer;
-        private readonly ICronometerTime _cronometerTime;
+        private readonly ICronometerTimeMeasure? _cronometerTime;
 
-        private Cronometer(ICronometerTime cronometerTime)
+        private Cronometer(ICronometerTimeMeasure cronometerTime):base(Guid.NewGuid())
         {
-            _cronometerTime = new CronometerTime();
+            _cronometerTime = cronometerTime;
             _timer = new System.Timers.Timer();
-            _timer.Interval = 1000;
+            _timer.Interval = _cronometerTime.Interval;
             _timer.Elapsed += _timer_Elapsed;
         }
 
         private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _cronometerTime.AdvanceTime();
+            _cronometerTime?.AdvanceTime();
             var args = new TimerElapsedEventArgs() { CronometerTime = _cronometerTime };
             UnitOfTimeElapsed?.Invoke(this, args);
         }
@@ -39,7 +38,7 @@ namespace CronometerTask.Domain.Cronometer
 
         public void Stop()
         {
-            _cronometerTime.Reset();
+            _cronometerTime?.Reset();
             IsRunning = false;
             IsPaused = false;
 
@@ -57,16 +56,16 @@ namespace CronometerTask.Domain.Cronometer
 
         }
 
-        public event EventHandler<TimerElapsedEventArgs> UnitOfTimeElapsed;
+        public event EventHandler<TimerElapsedEventArgs>? UnitOfTimeElapsed;
         public int Seconds { get; private set; }
         public int Minutes { get; private set; }
         public int Hours { get; private set; }
-        public ICronometerTime CronometerTime { get; private set; }
+        public ICronometerTimeMeasure CronometerTime { get; private set; }
         public bool IsRunning { get; private set; }
         public bool IsPaused { get; private set; }
         
 
-        public static Cronometer CreateCronometer(ICronometerTime? cronometerTime = null)
+        public static Cronometer CreateCronometer(ICronometerTimeMeasure cronometerTime)
         {
             return new Cronometer(cronometerTime);
         }

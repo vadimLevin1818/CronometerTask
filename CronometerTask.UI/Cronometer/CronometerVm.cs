@@ -1,4 +1,5 @@
 ﻿using CronometerTask.Domain;
+using CronometerTask.Domain.Cronometer;
 using CronometerTask.UI.Services;
 using CronoTask.UI.Common;
 using CronoTask.UI.ViewModel;
@@ -8,10 +9,13 @@ namespace CronometerTask.UI.Cronometer
 {
     public class CronometerVm : ViewModelBase
     {
+        private const string InitialTimeValue = "00";
+
         private string _seconds;
         private string _minutes;
         private string _hours;
-        private Domain.Cronometer.ICronometer _cronometer;
+        //private Domain.Cronometer.ICronometer _cronometer;
+        private CronometerService _service;
         private readonly ICommand? _startCommand;
         private readonly ICommand? _pauseCommand;
         private readonly ICommand? _stopCommand;
@@ -19,46 +23,51 @@ namespace CronometerTask.UI.Cronometer
         public CronometerVm()
         {
             SetInitialClockParameters();
-            _cronometer = Domain.Cronometer.Cronometer.CreateCronometer();
-            var container = new CronometerService(_cronometer);
+            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            var cronometer = Domain.Cronometer.Cronometer.CreateCronometer(timer);
+            _service = new CronometerService(cronometer);
 
             _startCommand = new RelayCommand((param) => {
-                container.Start();
-                OnPropertyChanged(nameof(CanStart));
-                OnPropertyChanged(nameof(CanStop));
-                OnPropertyChanged(nameof(CanReset));
+                _service.Start();
+                NotifyAvailabilityPropertiesChanged();
             }, param => CanStart);
 
             _pauseCommand = new RelayCommand((param) => 
             {
-                container.Pause();
-                OnPropertyChanged(nameof(CanStart));
-                OnPropertyChanged(nameof(CanStop));
-                OnPropertyChanged(nameof(CanReset));
+                _service.Pause();
+                NotifyAvailabilityPropertiesChanged();
             }, param => CanStop);
 
-            _stopCommand = new RelayCommand((param) => 
+            _stopCommand = new RelayCommand((param) =>
             {
-                container.Stop();
-                OnPropertyChanged(nameof(CanStart));
-                OnPropertyChanged(nameof(CanStop));
-                OnPropertyChanged(nameof(CanReset));
+                _service.Stop();
+                NotifyAvailabilityPropertiesChanged();
             }, param => CanReset);
 
-            _cronometer.UnitOfTimeElapsed += (sender, args) => {
-                Seconds = args.CronometerTime.Seconds < 10 ? $"0{args.CronometerTime.Seconds}" : args.CronometerTime.Seconds.ToString();
-                Minutes = args.CronometerTime.Minutes < 10 ? $"0{args.CronometerTime.Minutes}" : args.CronometerTime.Minutes.ToString();
-                Hours = args.CronometerTime.Hours < 10 ? $"0{args.CronometerTime.Hours}" : args.CronometerTime.Hours.ToString();
-            };
+            cronometer.UnitOfTimeElapsed += (sender, args) => {
+                if (args.CronometerTime == null) return;
 
+                Seconds = args.CronometerTime.Time.Second < 10 ? $"0{args.CronometerTime.Time.Second}" : args.CronometerTime.Time.Second.ToString();
+                Minutes = args.CronometerTime.Time.Minute < 10 ? $"0{args.CronometerTime.Time.Minute}" : args.CronometerTime.Time.Minute.ToString();
+                Hours = args.CronometerTime.Time.Hour < 10 ? $"0{args.CronometerTime.Time.Hour}" : args.CronometerTime.Time.Hour.ToString();
+            };
         }
 
         private void SetInitialClockParameters()
         {
-            Seconds = "00";
-            Minutes = "00";
-            Hours = "00";
-    }
+            Seconds = InitialTimeValue;
+            Minutes = InitialTimeValue;
+            Hours = InitialTimeValue;
+        }
+
+        private void NotifyAvailabilityPropertiesChanged()
+        {
+            OnPropertyChanged(nameof(CanStart));
+            OnPropertyChanged(nameof(CanStop));
+            OnPropertyChanged(nameof(CanReset));
+        }
+
+        #region Commands
 
         public ICommand? StartCommand => _startCommand;
         public ICommand? PauseCommand => _pauseCommand;
@@ -74,6 +83,10 @@ namespace CronometerTask.UI.Cronometer
         //          //  }));
         //    }
         //}
+
+        #endregion
+
+        #region Properties
 
         public string Seconds
         {
@@ -105,10 +118,13 @@ namespace CronometerTask.UI.Cronometer
             }
         }
 
-        public bool CanStart => !_cronometer.IsRunning;
+        public bool CanStart => !_service.IsRunning;
 
-        public bool CanStop => _cronometer.IsRunning;
+        public bool CanStop => _service.IsRunning;
 
-        public bool CanReset => _cronometer.IsPaused;
+        public bool CanReset => _service.IsPaused;
+
+        #endregion
+
     }
 }

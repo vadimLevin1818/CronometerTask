@@ -7,7 +7,8 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStart()
         {
-            ICronometer cronometer = Cronometer.CreateCronometer();
+            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
 
@@ -18,7 +19,8 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestPause()
         {
-            ICronometer cronometer = Cronometer.CreateCronometer();
+            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
 
@@ -32,7 +34,8 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStop()
         {
-            ICronometer cronometer = Cronometer.CreateCronometer();
+            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
             Assert.True(cronometer.IsRunning);
@@ -49,7 +52,8 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStartPauseStart()
         {
-            ICronometer cronometer = Cronometer.CreateCronometer();
+            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
             Assert.True(cronometer.IsRunning);

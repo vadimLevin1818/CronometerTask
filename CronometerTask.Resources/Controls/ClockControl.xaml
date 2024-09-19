@@ -6,8 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CronometerTask.Resources.Controls"
              mc:Ignorable="d" 
-             d:DataContext="{Binding}"
-             Width="400">
+             Width="500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,11 +25,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-        
             <Label Content="{Binding Hours}" Style="{StaticResource DigitalLabel}" />
-            <Label Content=":" Style="{StaticResource DigitalLabel}" Grid.Column="1"/>
+            <Label Content="::" Style="{StaticResource DigitalLabel}" Grid.Column="1"/>
             <Label Content="{Binding Minutes}" Style="{StaticResource DigitalLabel}" Grid.Column="2"/>
-            <Label Content=":" Style="{StaticResource DigitalLabel}" Grid.Column="3"/>
+            <Label Content="::" Style="{StaticResource DigitalLabel}" Grid.Column="3"/>
             <Label Content="{Binding Seconds}" Style="{StaticResource DigitalLabel}"  Grid.Column="4"/>
         </Grid>
     </Border>
