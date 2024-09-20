@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace CronometerTask.UI.ViewModel
+namespace CronometerTask.UI.Common
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {

@@ -2,7 +2,6 @@
 using CronometerTask.Domain.Cronometers;
 using CronometerTask.UI.Services;
 using CronometerTask.UI.Common;
-using CronometerTask.UI.ViewModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -34,7 +33,7 @@ namespace CronometerTask.UI.Cronometer
         {
             SetInitialClockParameters();
             ITimeCounter timer = new SecondsTimeCounter();
-            var cronometer = Domain.Cronometers.Cronometer.CreateCronometer(timer);
+            ICronometer cronometer = Domain.Cronometers.Cronometer.CreateCronometer(timer);
             _cronometerService = new CronometerService(cronometer);
             _cronometerService.SubscribeToUnitOfTimeElapsed(CronometerUnitOfTimeElapsed);
 
@@ -114,6 +113,9 @@ namespace CronometerTask.UI.Cronometer
             Hours = InitialTimeValue;
         }
 
+        /// <summary>
+        /// Called when we need to update the state of the three operational buttons.
+        /// </summary>
         private void NotifyButtonsStatePropertiesChanged()
         {
             OnPropertyChanged(nameof(CanStart));
@@ -134,6 +136,9 @@ namespace CronometerTask.UI.Cronometer
 
         #region Properties
 
+        /// <summary>
+        /// The header will change depending on the state of the cronometer.
+        /// </summary>
         public string StartButtonHeader => _cronometerService.IsPaused || _cronometerService.IsRunning
             ? PauseStartButtonHeader 
             : InitialStartButtonHeader;
