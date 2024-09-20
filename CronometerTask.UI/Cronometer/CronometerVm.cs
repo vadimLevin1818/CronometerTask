@@ -3,6 +3,8 @@ using CronometerTask.Domain.Cronometers;
 using CronometerTask.UI.Services;
 using CronoTask.UI.Common;
 using CronoTask.UI.ViewModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CronometerTask.UI.Cronometer
@@ -34,12 +36,11 @@ namespace CronometerTask.UI.Cronometer
             ICronometerTimeMeasure timer = new SecondsTimeMeasure();
             var cronometer = Domain.Cronometers.Cronometer.CreateCronometer(timer);
             _cronometerService = new CronometerService(cronometer);
+            _cronometerService.SubscribeToUnitOfTimeElapsed(CronometerUnitOfTimeElapsed);
 
             _startCommand = new RelayCommand(Start, param => CanStart);
             _pauseCommand = new RelayCommand(Pause, param => CanStop);
             _stopCommand = new RelayCommand(Stop, param => CanReset);
-
-            cronometer.UnitOfTimeElapsed += CronometerUnitOfTimeElapsed;
         }
 
         #endregion
@@ -55,10 +56,9 @@ namespace CronometerTask.UI.Cronometer
             }
             catch (Exception ex)
             {
-
-                throw;
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show("There was an error starting the cronometer.");
             }
-
         }
 
         private void Pause(object? param)
@@ -70,10 +70,9 @@ namespace CronometerTask.UI.Cronometer
             }
             catch (Exception ex)
             {
-
-                throw;
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show("There was an error pausing the cronometer.");
             }
-
         }
 
         private void Stop(object? param)
@@ -85,10 +84,9 @@ namespace CronometerTask.UI.Cronometer
             }
             catch (Exception ex)
             {
-
-                throw;
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show("There was an error stopping the cronometer.");
             }
-
         }
 
         private void CronometerUnitOfTimeElapsed(object? sender, UnitOfTimeElapsedEventArgs args)
@@ -130,17 +128,6 @@ namespace CronometerTask.UI.Cronometer
         public ICommand? StartCommand => _startCommand;
         public ICommand? PauseCommand => _pauseCommand;
         public ICommand? StopCommand => _stopCommand;
-        //{
-        //    get
-        //    {
-        //        return _startCommand;
-        //          //?? (_startCommand = new RelayCommand(
-        //          //  async () =>
-        //          //  {
-        //          //      await Refresh();
-        //          //  }));
-        //    }
-        //}
 
         #endregion
 

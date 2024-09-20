@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:CronoTask"
         mc:Ignorable="d"
         Background="DarkGray"
-        Title="Cronometer" Height="450" Width="800">
-    <StackPanel>
+        Title="Cronometer" Height="250" Width="700">
+    <Grid>
         <cronometer:CronometerView/>
-    </StackPanel>
+    </Grid>
 </Window>

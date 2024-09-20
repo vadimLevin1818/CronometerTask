@@ -1,4 +1,5 @@
-﻿using CronometerTask.Domain.Cronometers;
+﻿using CronometerTask.Domain.Common;
+using CronometerTask.Domain.Cronometers;
 
 namespace CronometerTask.UI.Services
 {
@@ -24,6 +25,11 @@ namespace CronometerTask.UI.Services
         public void Stop()
         {
             _cronometer.Stop();
+        }
+
+        public void SubscribeToUnitOfTimeElapsed(EventHandler<UnitOfTimeElapsedEventArgs>? eventHandler)
+        {
+            _cronometer.UnitOfTimeElapsed += eventHandler;
         }
 
         public bool IsRunning => _cronometer.IsRunning;
