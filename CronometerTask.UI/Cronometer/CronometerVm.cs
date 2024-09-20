@@ -33,7 +33,7 @@ namespace CronometerTask.UI.Cronometer
         public CronometerVm()
         {
             SetInitialClockParameters();
-            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ITimeCounter timer = new SecondsTimeCounter();
             var cronometer = Domain.Cronometers.Cronometer.CreateCronometer(timer);
             _cronometerService = new CronometerService(cronometer);
             _cronometerService.SubscribeToUnitOfTimeElapsed(CronometerUnitOfTimeElapsed);
@@ -80,6 +80,7 @@ namespace CronometerTask.UI.Cronometer
             try
             {
                 _cronometerService.Stop();
+                SetInitialClockParameters();
                 NotifyAvailabilityPropertiesChanged();
             }
             catch (Exception ex)
@@ -91,19 +92,19 @@ namespace CronometerTask.UI.Cronometer
 
         private void CronometerUnitOfTimeElapsed(object? sender, UnitOfTimeElapsedEventArgs args)
         {
-            if (args?.CronometerTimeMeasure == null) return;
+            if (args == null) return;
 
-            Seconds = args.CronometerTimeMeasure.Time.Second < NumericRepresentationThreashold 
-                ? $"0{args.CronometerTimeMeasure.Time.Second}" 
-                : args.CronometerTimeMeasure.Time.Second.ToString();
+            Seconds = args.ElapsedTime.Second < NumericRepresentationThreashold 
+                ? $"0{args.ElapsedTime.Second}" 
+                : args.ElapsedTime.Second.ToString();
 
-            Minutes = args.CronometerTimeMeasure.Time.Minute < NumericRepresentationThreashold 
-                ? $"0{args.CronometerTimeMeasure.Time.Minute}" 
-                : args.CronometerTimeMeasure.Time.Minute.ToString();
+            Minutes = args.ElapsedTime.Minute < NumericRepresentationThreashold 
+                ? $"0{args.ElapsedTime.Minute}" 
+                : args.ElapsedTime.Minute.ToString();
 
-            Hours = args.CronometerTimeMeasure.Time.Hour < NumericRepresentationThreashold 
-                ? $"0{args.CronometerTimeMeasure.Time.Hour}" 
-                : args.CronometerTimeMeasure.Time.Hour.ToString();
+            Hours = args.ElapsedTime.Hour < NumericRepresentationThreashold 
+                ? $"0{args.ElapsedTime.Hour}" 
+                : args.ElapsedTime.Hour.ToString();
         }
 
         private void SetInitialClockParameters()

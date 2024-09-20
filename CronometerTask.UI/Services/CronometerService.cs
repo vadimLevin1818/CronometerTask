@@ -3,14 +3,13 @@ using CronometerTask.Domain.Cronometers;
 
 namespace CronometerTask.UI.Services
 {
-    public class CronometerService
+    /// <summary>
+    /// Dependency injection service for Cronometer with construction injection.
+    /// </summary>
+    /// <param name="cronometer">Injected ICronometer</param>
+    public class CronometerService(ICronometer cronometer)
     {
-        private ICronometer _cronometer;
-
-        public CronometerService(ICronometer cronometer)
-        {
-            _cronometer = cronometer;
-        }
+        private readonly ICronometer _cronometer = cronometer;
 
         public void Start()
         {

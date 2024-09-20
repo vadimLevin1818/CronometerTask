@@ -4,6 +4,6 @@ namespace CronometerTask.Domain.Common
 {
     public class UnitOfTimeElapsedEventArgs : EventArgs
     {
-        public ICronometerTimeMeasure? CronometerTimeMeasure { get; set; }
+        public DateTime ElapsedTime { get; init; }
     }
 }

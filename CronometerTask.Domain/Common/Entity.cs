@@ -1,5 +1,8 @@
 ﻿namespace CronometerTask.Domain.Common
 {
+    /// <summary>
+    /// Entity class for domain driven design. In case we would need to persist our objects in the future.
+    /// </summary>
     public abstract class Entity : IEquatable<Entity>
     {
         protected Entity(Guid id)

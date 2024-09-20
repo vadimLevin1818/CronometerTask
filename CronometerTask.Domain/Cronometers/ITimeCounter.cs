@@ -1,10 +1,10 @@
 ﻿namespace CronometerTask.Domain.Cronometers
 {
-    public interface ICronometerTimeMeasure
+    public interface ITimeCounter
     {
-        int Interval { get; }
-        DateTime Time { get; }
         void AdvanceTime();
         void Reset();
+        int Interval { get; }
+        DateTime Time { get; }
     }
 }

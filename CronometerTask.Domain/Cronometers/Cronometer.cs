@@ -4,36 +4,51 @@ namespace CronometerTask.Domain.Cronometers
 {
     public class Cronometer : AggregateRoot, ICronometer
     {
+        // timer to follow the inner state of cronometer
         private readonly System.Timers.Timer _timer;
-        private readonly ICronometerTimeMeasure _cronometerTimeMeasure;
-        private EventHandler<UnitOfTimeElapsedEventArgs>? UnitOfTimeElapsedInternal;
+        // using time counter interface so we can change to a different counter without modifying existing code
+        private readonly ITimeCounter _cronometerTimeCounter;
+        private EventHandler<UnitOfTimeElapsedEventArgs>? _unitOfTimeElapsedInternal;
 
-        private Cronometer(ICronometerTimeMeasure cronometerTimeMeasure):base(Guid.NewGuid())
+        /// <summary>
+        /// Private constructor, available only through static factory method.
+        /// </summary>
+        /// <param name="cronometerTimeCounter">Injected counter param that defines intervals and keeps time.</param>
+        private Cronometer(ITimeCounter cronometerTimeCounter):base(Guid.NewGuid())
         {
-            _cronometerTimeMeasure = cronometerTimeMeasure;
-            _timer = new System.Timers.Timer();
-            _timer.Interval = _cronometerTimeMeasure.Interval;
-            _timer.Elapsed += _timer_Elapsed;
+            _cronometerTimeCounter = cronometerTimeCounter;
+            _timer = new System.Timers.Timer()
+            {
+                Interval = _cronometerTimeCounter.Interval,
+                
+            };
+            _timer.Elapsed += Timer_Elapsed;
         }
 
         public event EventHandler<UnitOfTimeElapsedEventArgs>? UnitOfTimeElapsed
         {
             add
             {
-                UnitOfTimeElapsedInternal += value;
+                _unitOfTimeElapsedInternal += value;
             }
             remove
             {
-                UnitOfTimeElapsedInternal -= value;
+                _unitOfTimeElapsedInternal -= value;
             }
         }
 
-        private void _timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        #region Event Handlers
+
+        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _cronometerTimeMeasure.AdvanceTime();
-            var args = new UnitOfTimeElapsedEventArgs() { CronometerTimeMeasure = _cronometerTimeMeasure };
-            UnitOfTimeElapsedInternal?.Invoke(this, args);
+            _cronometerTimeCounter.AdvanceTime();
+            var args = new UnitOfTimeElapsedEventArgs() { ElapsedTime = _cronometerTimeCounter.Time };
+            _unitOfTimeElapsedInternal?.Invoke(this, args);
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Start()
         {
@@ -51,21 +66,32 @@ namespace CronometerTask.Domain.Cronometers
 
         public void Stop()
         {
-            _cronometerTimeMeasure?.Reset();
+            _cronometerTimeCounter?.Reset();
             IsRunning = false;
             IsPaused = false;
-
-            var args = new UnitOfTimeElapsedEventArgs() { CronometerTimeMeasure = _cronometerTimeMeasure };
-            UnitOfTimeElapsedInternal?.Invoke(this, args);
         }
+
+        #endregion
+
+        #region Static Methods
+
+        /// <summary>
+        /// Factory method creating new cronometer with counter as an injected parameter.
+        /// </summary>
+        /// <param name="timeCounter">Injected parameter of time counter.</param>
+        /// <returns>New ICronometer instance.</returns>
+        public static ICronometer CreateCronometer(ITimeCounter timeCounter)
+        {
+            return new Cronometer(timeCounter);
+        }
+
+        #endregion
+
+        #region Properties
 
         public bool IsRunning { get; private set; }
         public bool IsPaused { get; private set; }
-        
 
-        public static Cronometer CreateCronometer(ICronometerTimeMeasure cronometerTime)
-        {
-            return new Cronometer(cronometerTime);
-        }
+        #endregion
     }
 }

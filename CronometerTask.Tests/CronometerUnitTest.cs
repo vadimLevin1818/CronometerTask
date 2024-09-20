@@ -7,7 +7,7 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStart()
         {
-            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ITimeCounter timer = new SecondsTimeCounter();
             ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
@@ -19,7 +19,7 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestPause()
         {
-            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ITimeCounter timer = new SecondsTimeCounter();
             ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
@@ -34,7 +34,7 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStop()
         {
-            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ITimeCounter timer = new SecondsTimeCounter();
             ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();
@@ -52,7 +52,7 @@ namespace CronometerTask.Tests
         [Fact]
         public void TestStartPauseStart()
         {
-            ICronometerTimeMeasure timer = new SecondsTimeMeasure();
+            ITimeCounter timer = new SecondsTimeCounter();
             ICronometer cronometer = Cronometer.CreateCronometer(timer);
 
             cronometer.Start();

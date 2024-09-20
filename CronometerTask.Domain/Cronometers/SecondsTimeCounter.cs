@@ -1,9 +1,6 @@
-﻿using System;
-using System.Timers;
-
-namespace CronometerTask.Domain.Cronometers
+﻿namespace CronometerTask.Domain.Cronometers
 {
-    public class SecondsTimeMeasure : ICronometerTimeMeasure
+    public class SecondsTimeCounter : ITimeCounter
     {
         private const int SecondsInterval = 1000;
 
