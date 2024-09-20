@@ -1,8 +1,8 @@
 ﻿using CronometerTask.Domain.Common;
 using CronometerTask.Domain.Cronometers;
 using CronometerTask.UI.Services;
-using CronoTask.UI.Common;
-using CronoTask.UI.ViewModel;
+using CronometerTask.UI.Common;
+using CronometerTask.UI.ViewModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
@@ -52,7 +52,7 @@ namespace CronometerTask.UI.Cronometer
             try
             {
                 _cronometerService.Start();
-                NotifyAvailabilityPropertiesChanged();
+                NotifyButtonsStatePropertiesChanged();
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace CronometerTask.UI.Cronometer
             try
             {
                 _cronometerService.Pause();
-                NotifyAvailabilityPropertiesChanged();
+                NotifyButtonsStatePropertiesChanged();
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace CronometerTask.UI.Cronometer
             {
                 _cronometerService.Stop();
                 SetInitialClockParameters();
-                NotifyAvailabilityPropertiesChanged();
+                NotifyButtonsStatePropertiesChanged();
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace CronometerTask.UI.Cronometer
             Hours = InitialTimeValue;
         }
 
-        private void NotifyAvailabilityPropertiesChanged()
+        private void NotifyButtonsStatePropertiesChanged()
         {
             OnPropertyChanged(nameof(CanStart));
             OnPropertyChanged(nameof(CanStop));

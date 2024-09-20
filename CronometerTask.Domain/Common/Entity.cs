@@ -3,14 +3,9 @@
     /// <summary>
     /// Entity class for domain driven design. In case we would need to persist our objects in the future.
     /// </summary>
-    public abstract class Entity : IEquatable<Entity>
+    public abstract class Entity(Guid id) : IEquatable<Entity>
     {
-        protected Entity(Guid id)
-        {
-            Id = id;
-        }
-
-        public Guid Id { get; private init; }
+        public Guid Id { get; private init; } = id;
 
         public static bool operator ==(Entity? a, Entity? b)
         {

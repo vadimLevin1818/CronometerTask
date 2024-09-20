@@ -3,10 +3,7 @@
     /// <summary>
     /// Aggregate root class for domain driven design.
     /// </summary>
-    public abstract class AggregateRoot : Entity
+    public abstract class AggregateRoot(Guid id) : Entity(id)
     {
-        protected AggregateRoot(Guid id) : base(id)
-        {
-        }
     }
 }

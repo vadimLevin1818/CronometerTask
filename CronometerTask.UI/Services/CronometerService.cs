@@ -6,7 +6,7 @@ namespace CronometerTask.UI.Services
     /// <summary>
     /// Dependency injection service for Cronometer with construction injection.
     /// </summary>
-    /// <param name="cronometer">Injected ICronometer</param>
+    /// <param name="cronometer">Injected ICronometer object</param>
     public class CronometerService(ICronometer cronometer)
     {
         private readonly ICronometer _cronometer = cronometer;

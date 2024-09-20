@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace CronoTask.UI.Common
+namespace CronometerTask.UI.Common
 {
     public class RelayCommand : ICommand
     {
